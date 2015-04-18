@@ -1,0 +1,117 @@
+<div class="page-header">
+    <h3>Sign Up</h3>
+</div>
+<form class="form-horizontal" name="signUpForm" novalidate>
+    <!-- username -> email -->
+    <div class="form-group">
+        <label for="signUpEmail" class="col-sm-2 control-label hidden-xs">Email</label>
+
+        <div class="col-sm-7 col-xs-9">
+            <input type="email" class="form-control" placeholder="Email" id="signUpEmail" name="signUpEmail"
+                   required="required"
+                   ng-model="user.info.username" ng-blur="checkUsername()" autocomplete="false">
+        </div>
+        <div class="col-xs-3"
+             ng-show="signUpForm.$submitted || signUpForm.signUpEmail.$touched">
+            <div class="btn btn-success" ng-show="emailOk">
+                <span class="glyphicon glyphicon-ok"></span>
+            </div>
+            <div class="btn btn-danger" ng-hide="emailOk">
+                <span class="glyphicon glyphicon-remove"
+                      ng-show="!emailOk&&!signUpForm.signUpEmail.$error.required"></span>
+                <span ng-show="signUpForm.signUpEmail.$error.required">Required</span>
+            </div>
+        </div>
+    </div>
+    <!-- first password -->
+    <div class="form-group">
+        <label for="signUpPassword1" class="col-sm-2 control-label hidden-xs">Password</label>
+
+        <div class="col-sm-7">
+            <input type="password" class="form-control" id="signUpPassword1" placeholder="Password"
+                   name="signUpPassword1" required="required" autocomplete="false"
+                   ng-model="user.info.password" ng-change="checkPassword()">
+        </div>
+        <div class="col-xs-3">
+            <div class="btn" ng-show="user.info.password"
+                 ng-class="{'btn-danger':passwordLevel=='weak','btn-warning':passwordLevel=='normal','btn-success':passwordLevel=='strong'}">
+                {{passwordLevel}}
+            </div>
+            <div ng-show="signUpForm.$submitted || signUpForm.signUpPassword1.$touched">
+                <div class="btn btn-danger" ng-show="!user.info.password">
+                    <span ng-show="signUpForm.signUpPassword1.$error.required">Required</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- second password -->
+    <div class="form-group">
+        <label for="signUpPassword2" class="col-sm-2 control-label hidden-xs">Re-type Password</label>
+
+        <div class="col-sm-7">
+            <input type="password" class="form-control" id="signUpPassword2" placeholder="Re-type Password"
+                   name="signUpPassword2" required="required"
+                   ng-model="passwordRetype" ng-change="checkPassword()" autocomplete="false">
+        </div>
+        <div class="col-xs-3">
+            <div class="btn btn-success" ng-show="passwordSame">
+                <span class="glyphicon glyphicon-ok"></span>
+            </div>
+            <div ng-show="signUpForm.$submitted||signUpForm.signUpPassword2.$touched">
+                <div class="btn btn-danger" ng-show="!passwordSame||signUpForm.signUpPassword2.$error.required">
+                    <span ng-show="!passwordSame&&passwordRetype">Mismatch</span>
+                    <span ng-show="signUpForm.signUpPassword2.$error.required">Required</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- first name -->
+    <div class="form-group">
+        <label for="firstName" class="col-sm-2 control-label hidden-xs">First Name</label>
+
+        <div class="col-sm-7">
+            <input type="text" class="form-control" id="firstName" placeholder="First Name"
+                   ng-model="user.info.firstName" autocomplete="false">
+        </div>
+    </div>
+    <!-- last name -->
+    <div class="form-group">
+        <label for="lastName" class="col-sm-2 control-label hidden-xs">First Name</label>
+
+        <div class="col-sm-7">
+            <input type="text" class="form-control" id="lastName" placeholder="Last Name"
+                   ng-model="user.info.lastName" autocomplete="false">
+        </div>
+    </div>
+    <!-- gender -->
+    <div class="form-group">
+        <label for="gender" class="col-sm-2 control-label hidden-xs">Gender</label>
+
+        <div class="col-sm-7">
+            <div class="btn-group" id="gender">
+                <label class="btn btn-default" ng-model="user.info.gender" btn-radio="'male'">Male</label>
+                <label class="btn btn-default" ng-model="user.info.gender" btn-radio="'female'">Female</label>
+            </div>
+        </div>
+    </div>
+    <!-- role -->
+    <div class="form-group">
+        <label for="role" class="col-sm-2 control-label hidden-xs">Role</label>
+
+        <div class="col-sm-7">
+            <div class="btn-group" id="role">
+                <label class="btn btn-default" ng-model="user.info.role" btn-radio="'employee'">Employee</label>
+                <label class="btn btn-default" ng-model="user.info.role" btn-radio="'manager'">Manager</label>
+                <label class="btn btn-default" ng-model="user.info.role" btn-radio="'admin'">Admin</label>
+            </div>
+        </div>
+    </div>
+    <!-- submit -->
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-7">
+            <button type="submit" class="btn btn-default"
+                    ng-click="submitSignUpForm(signUpForm,signUpForm.signUpEmail,signUpForm.signUpPassword1)">Sign Up
+            </button>
+        </div>
+    </div>
+</form>

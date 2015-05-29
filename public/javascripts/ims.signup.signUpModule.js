@@ -19,9 +19,9 @@ angular.module(moduleName, [])
         $scope.checkUsername = function () {
             imsFactory.usernameValidate($scope.user.info.username, function (data, status) {
                 $scope.emailOk = (data != 'Username duplicated!') && emailRegex.test($scope.user.info.username);
-
             });
         };
+
         $scope.checkPassword = function () {
             var pwd1 = $scope.user.info.password || "";
             var pwd2 = $scope.passwordRetype || "";

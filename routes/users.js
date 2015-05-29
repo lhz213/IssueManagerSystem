@@ -52,7 +52,8 @@ function userSignIn(req, res, info) {
                     user.errorMessage = 'Password incorrect!';
                     res.send(JSON.stringify(user));
                 } else {
-                    console.log('-->' + user.username + 'User does not exist!');
+                    console.log('-->' + info.username + 'User does not exist!');
+                    user = {};
                     user.errorMessage = 'User does not exist!';
                     res.send(JSON.stringify(user));
                 }

@@ -44,7 +44,7 @@ angular.module('issueManagerSystem', ['ngRoute', 'ui.bootstrap', 'ims.Utils', 't
             isopen: false
         };
 
-        $scope.toggleDropdown = function($event) {
+        $scope.toggleDropdown = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
             $scope.status.isopen = !$scope.status.isopen;
@@ -58,8 +58,8 @@ angular.module('issueManagerSystem', ['ngRoute', 'ui.bootstrap', 'ims.Utils', 't
 
             modalInstance.result.then(function (user) {
                 $scope.user = user;
-                console.log($scope.user.fristName);
-                $scope.user.name = $scope.user.fristName?$scope.user.fristName:$scope.user.username;
+                console.log($scope.user.firstName);
+                $scope.user.name = $scope.user.firstName ? $scope.user.firstName : $scope.user.username;
             });
         };
     }])
@@ -69,8 +69,16 @@ angular.module('issueManagerSystem', ['ngRoute', 'ui.bootstrap', 'ims.Utils', 't
         $scope.user.info = {};
         $scope.user.info.username = '';
         $scope.user.info.password = '';
+        $scope.formName = 'signInForm';
+        $scope.emailFormatIncorrect = false;
+
+        var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        $scope.checkUsername = function () {
+            $scope.emailFormatIncorrect = !emailRegex.test($scope.user.info.username);
+        };
+
         $scope.signIn = function (email, password) {
-            if (!email.$error.required && !password.$error.required) {
+            if (!email.$error.required && !password.$error.required && !$scope.emailFormatIncorrect) {
                 imsFactory.userSignIn($scope.user, function (data, status) {
                     $modalInstance.close(data);
                 });
@@ -79,21 +87,13 @@ angular.module('issueManagerSystem', ['ngRoute', 'ui.bootstrap', 'ims.Utils', 't
         $scope.close = function () {
             $modalInstance.dismiss('close');
         };
-        $scope.resetSignInForm = function (form) {
-            if (form) {
-                form.$setPristine();
-                form.$setUntouched();
-            }
-            $scope.question = {};
-        };
-        $scope.resetSignInForm();
 
     }]);
 
 
 angular.module("template/modal/imsSignIn.html", []).run(["$templateCache", function ($templateCache) {
     $templateCache.put("template/modal/imsSignIn.html",
-        "<form name='signInForm' novalidate> \n" +
+        "<form name={{formName}} novalidate> \n" +
         "   <div class='modal-header'> \n" +
         "       <h3 class='modal-title'>Sign In\n" +
         "           <small>Don't have an account? <a href='#/signUp' ng-click='close()'>SignUp</a> now.</small> \n" +
@@ -101,17 +101,20 @@ angular.module("template/modal/imsSignIn.html", []).run(["$templateCache", funct
         "   </div> \n" +
         "   <div class='modal-body'> \n" +
         "       <div class='form-group'> \n" +
-        "           <div class='col-xs-6 pull-right ng-show='signInForm.$submitted || signInForm.email.$touched'> \n" +
-        "               <div class='label label-danger' ng-show='signInForm.email.$error.required'> \n" +
+        "           <div class='col-xs-6 pull-right' ng-show='{{formName}}.$submitted || {{formName}}.email.$touched'> \n" +
+        "               <div class='label label-danger' ng-show='{{formName}}.email.$error.required'> \n" +
         "                   Email cannot empty \n" +
+        "               </div> \n" +
+        "               <div class='label label-danger' ng-show='emailFormatIncorrect && !{{formName}}.email.$error.required'> \n" +
+        "                   Email Format Incorrect! \n" +
         "               </div> \n" +
         "           </div> \n" +
         "           <label for='signInEmailAddress1'>Email address</label> \n" +
-        "           <input type='email' class='form-control' id='email' name='email' placeholder='Enter email' ng-model='user.info.username' required='required'> \n" +
+        "           <input type='email' class='form-control' id='email' name='email' placeholder='Enter email' ng-model='user.info.username' required='required' ng-change='checkUsername()'> \n" +
         "       </div> \n" +
         "       <div class='form-group'> \n" +
-        "           <div class='col-xs-6 pull-right ng-show='signInForm.$submitted || signInForm.password.$touched'> \n" +
-        "               <div class='label label-danger' ng-show='signInForm.password.$error.required'> \n" +
+        "           <div class='col-xs-6 pull-right' ng-show='{{formName}}.$submitted || {{formName}}.password.$touched'> \n" +
+        "               <div class='label label-danger' ng-show='{{formName}}.password.$error.required'> \n" +
         "                   Password cannot be empty \n" +
         "               </div> \n" +
         "           </div> \n" +

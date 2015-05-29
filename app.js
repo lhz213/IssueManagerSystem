@@ -9,7 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var mongojs = require('mongojs');
-var db = mongojs('localhost/IssueManagerDB')
+var db = mongojs('localhost/IssueManagerSystemDB')
 
 var app = express();
 
